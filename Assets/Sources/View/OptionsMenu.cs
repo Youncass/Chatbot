@@ -26,30 +26,16 @@ namespace Sources
             void SwitchMenu()
             {
                 if (_cg.interactable)
-                    CloseMenu();
+                    _cg.Hide();
                 else
-                    OpenMenu();
+                    _cg.Show();
             }
         }
 
         private void ChangePersonality(int index)
         {
             ChangedPersonality.Invoke((Personality)index);
-            CloseMenu();
-        }
-
-        private void OpenMenu()
-        {
-            _cg.alpha = 1;
-            _cg.interactable = true;
-            _cg.blocksRaycasts = true;
-        }
-
-        private void CloseMenu()
-        {
-            _cg.alpha = 0;
-            _cg.interactable = false;
-            _cg.blocksRaycasts = false;
+            _cg.Hide();
         }
     }
 }
