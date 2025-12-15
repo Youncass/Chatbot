@@ -6,13 +6,21 @@ namespace Sources
     {
         private readonly PythonDll _bot;
         private readonly IChatView _view;
+        private readonly IPersonalityMenu _personality;
 
-        public AI(IChatView view, PythonDll bot)
+        public AI(IChatView view, IPersonalityMenu personality, PythonDll bot)
         {
             _view = view;
             _view.UserSentMessage += GenerateReply;
+            _personality = personality;
+            _personality.ChangedPersonality += ChangePersonality;
 
             _bot = bot;
+        }
+
+        private void ChangePersonality(Personality personality)
+        {
+            _bot.GetVariable("change_personality")(personality.ToString().ToLower());
         }
 
         private void GenerateReply(string message)
@@ -24,6 +32,7 @@ namespace Sources
         public void Dispose()
         {
             _view.UserSentMessage -= GenerateReply;
+            _personality.ChangedPersonality -= ChangePersonality;
         }
     }
 }

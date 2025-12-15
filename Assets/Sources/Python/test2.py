@@ -342,3 +342,7 @@ bot = EmotionalFriendBot("Нейрон", "friendly")
 
 def chat(user_message):
     return bot.chat(user_message)
+
+
+def change_personality(personality):
+    bot.personality = personality
