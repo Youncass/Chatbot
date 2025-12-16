@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 namespace Sources
 {
@@ -9,6 +10,7 @@ namespace Sources
         [SerializeField] private TMP_Text _moodDescription, _memoryFacts, _conversationCount;
         [SerializeField] private Image _energy, _mood;
         [SerializeField] private Gradient _lowToHighColors;
+        [SerializeField] private float _updateTime;
 
         public void UpdateStats(AIReplyInfo stats)
         {
@@ -16,11 +18,11 @@ namespace Sources
             _memoryFacts.text = stats.memory_facts.ToString();
             _conversationCount.text = stats.conversation_count.ToString();
 
-            _energy.fillAmount = stats.energy;
-            _energy.color = _lowToHighColors.Evaluate(stats.energy);
+            _energy.DOFillAmount(stats.energy, _updateTime);
+            _energy.DOColor(_lowToHighColors.Evaluate(stats.energy), _updateTime);
 
-            _mood.fillAmount = stats.mood;
-            _mood.color = _moodDescription.color = _lowToHighColors.Evaluate(stats.mood);
+            _mood.DOFillAmount(stats.mood, _updateTime);
+            DOVirtual.Color(_mood.color, _lowToHighColors.Evaluate(stats.mood), _updateTime, v => _mood.color = _moodDescription.color = v);
         }
     }
 }
