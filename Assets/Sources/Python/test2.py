@@ -1,3 +1,4 @@
+import json
 from random import choice
 from datetime import datetime
 
@@ -331,7 +332,9 @@ class EmotionalFriendBot:
             if len(self.conversation_history) > 100:
                 self.conversation_history.pop(0)
 
-            return response
+            reply = self.get_stats()
+            reply['response'] = response
+            return json.dumps(reply)
 
         except Exception as e:
             return f"Ошибка в боте: {str(e)}"
@@ -342,3 +345,7 @@ bot = EmotionalFriendBot("Нейрон", "friendly")
 
 def chat(user_message):
     return bot.chat(user_message)
+
+
+def change_personality(personality):
+    bot.personality = personality

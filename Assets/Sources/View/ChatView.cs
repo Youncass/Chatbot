@@ -1,7 +1,8 @@
 using System;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
+using TMPro;
 
 namespace Sources
 {
@@ -9,6 +10,8 @@ namespace Sources
     {
         [SerializeField] private TMP_InputField _userInput;
         [SerializeField] private Button _sendButton;
+        [SerializeField] private Scrollbar _chatScrollbar;
+        [SerializeField] private float _sendScrollTime;
 
         [SerializeField] private MessageView _messagePrefab;
         [SerializeField] private Color _userColor, _aiColor;
@@ -31,12 +34,16 @@ namespace Sources
         private void SendUserMessage(string message)
         {
             CreateMessage("User", message, _userColor);
-            UserSentMessage.Invoke(message);
+            UserSentMessage?.Invoke(message);
+
+            _userInput.text = string.Empty;
+            _userInput.ActivateInputField();
         }
 
         private void CreateMessage(string sender, string content, Color messageColor)
         {
             Instantiate(_messagePrefab, transform).UpdateContent(sender, content, messageColor);
+            DOVirtual.Float(_chatScrollbar.value, 0, _sendScrollTime, v => _chatScrollbar.value = v);
         }
 
         private void OnDisable()
